@@ -69,6 +69,8 @@ class BaselineChallenge(FlowSpec):
         # split the data 80/20, or by using the flow's split-sz CLI argument
         _df = pd.DataFrame({"review": reviews, "label": labels})
         self.traindf, self.valdf = train_test_split(_df, test_size=self.split_size)
+        self.traindf.reset_index(inplace=True)
+        self.valdf.reset_index(inplace=True)
         print(f"num of rows in train set: {self.traindf.shape[0]}")
         print(f"num of rows in validation set: {self.valdf.shape[0]}")
 
@@ -110,6 +112,7 @@ class BaselineChallenge(FlowSpec):
         print('Starting NbowModel')
         self.results = []
         for params in self.hyperparam_set:
+            print(params)
             model = NbowModel(params['vocab_sz'])  # TODO: instantiate your custom model here!
             print('Fitting NbowModel')
             model.fit(X=self.traindf["review"], y=self.traindf["label"])
